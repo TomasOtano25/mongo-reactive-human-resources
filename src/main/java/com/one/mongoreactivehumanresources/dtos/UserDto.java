@@ -3,10 +3,12 @@ package com.one.mongoreactivehumanresources.dtos;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.one.mongoreactivehumanresources.documents.User;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+@NoArgsConstructor
 @JsonInclude(Include.NON_NULL)
 public class UserDto extends UserMinimumDto {
     private String email;
@@ -14,9 +16,6 @@ public class UserDto extends UserMinimumDto {
     private Boolean active;
 
     private LocalDateTime registrationDate;
-
-    public UserDto() {
-    }
 
     public UserDto(User user) {
         super(user.getMobile(), user.getUsername(), user.getRoles());
@@ -41,7 +40,7 @@ public class UserDto extends UserMinimumDto {
         this.active = active;
     }
 
-    public LocalDateTime getRegistrationDate() {
+            public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 

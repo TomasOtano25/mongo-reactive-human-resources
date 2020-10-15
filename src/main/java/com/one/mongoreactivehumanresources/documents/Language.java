@@ -1,5 +1,6 @@
 package com.one.mongoreactivehumanresources.documents;
 
+import com.one.mongoreactivehumanresources.dtos.LanguageDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,10 @@ public class Language {
 
     public Language(String name) {
         this.name = name;
+    }
+
+    public Language(LanguageDto languageDto) {
+        this.id = languageDto.getId();
+        this.name = languageDto.getName();
     }
 }

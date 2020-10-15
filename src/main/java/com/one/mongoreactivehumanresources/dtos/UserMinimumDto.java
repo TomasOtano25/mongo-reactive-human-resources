@@ -52,10 +52,6 @@ public class UserMinimumDto {
 
     @Override
     public String toString() {
-        return "UserMinimumDto{" +
-                "mobile='" + mobile + '\'' +
-                ", username='" + username + '\'' +
-                ", roles=" + Arrays.toString(roles) +
-                '}';
+        return "UserMinimumDto [mobile=" + mobile + ", username=" + username + ", roles=" + Arrays.toString(roles) + "]";
     }
 }

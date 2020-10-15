@@ -29,6 +29,10 @@ public class User {
         this.active = true;
     }
 
+    public User(User user) {
+        this();
+    }
+
     public static Builder builder() {
         return new Builder();
     }

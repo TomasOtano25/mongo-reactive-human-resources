@@ -3,6 +3,7 @@ package com.one.mongoreactivehumanresources.api_rest_controllers;
 import com.one.mongoreactivehumanresources.bussiness_controllers.LanguageController;
 import com.one.mongoreactivehumanresources.documents.Language;
 import com.one.mongoreactivehumanresources.dtos.LanguageDto;
+import com.one.mongoreactivehumanresources.dtos.search.LanguageSearchDto;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class LanguageResource {
     }
 
     @GetMapping
-    public Flux<LanguageDto> readAll() {
+    public Flux<LanguageDto> search(@RequestParam(required = false) String name) {
         return this.languageController.readAll()
                 .doOnNext(log -> LogManager.getLogger(this.getClass()).debug(log));
     }

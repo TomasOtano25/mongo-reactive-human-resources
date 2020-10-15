@@ -2,6 +2,7 @@ package com.one.mongoreactivehumanresources.bussiness_controllers;
 
 import com.one.mongoreactivehumanresources.documents.Language;
 import com.one.mongoreactivehumanresources.dtos.LanguageDto;
+import com.one.mongoreactivehumanresources.dtos.search.LanguageSearchDto;
 import com.one.mongoreactivehumanresources.exceptions.BadRequestException;
 import com.one.mongoreactivehumanresources.exceptions.NotFoundException;
 import com.one.mongoreactivehumanresources.repositories.LanguageReactRepository;
@@ -12,6 +13,8 @@ import reactor.core.publisher.Mono;
 
 @Controller
 public class LanguageController {
+    private static final String NOTHING_FOUND = "Nothing found";
+
     private LanguageReactRepository languageReactRepository;
 
     @Autowired
@@ -53,5 +56,19 @@ public class LanguageController {
         return this.languageReactRepository.findById(id)
                 .switchIfEmpty(Mono.error(new NotFoundException("Language id:" + id )))
                 .map(LanguageDto::new);
+    }
+
+    public Flux<LanguageDto> searchLanguage(LanguageSearchDto languageSearchDto) {
+        Flux<LanguageDto> languageDtoFLux;
+        /*if(languageSearchDto.getName().equals("null")) {
+            languageDtoFLux = this.languageReactRepository.findAll()
+                    .switchIfEmpty(Flux.error(new NotFoundException(NOTHING_FOUND)))
+                    .map(LanguageDto::new);
+        } else {*/
+            languageDtoFLux = this.languageReactRepository.findByNameLike(languageSearchDto.getName())
+                    .switchIfEmpty(Flux.error(new NotFoundException(NOTHING_FOUND)))
+                    .map(LanguageDto::new);
+//        }
+        return languageDtoFLux;
     }
 }

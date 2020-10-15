@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -37,17 +38,20 @@ public class DatabaseSeederService {
     private JobRepository jobRepository;
     private CompetencyRepository competencyRepository;
     private CandidateRepository candidateRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     public DatabaseSeederService(Environment environment, UserRepository userRepository,
                                  LanguageRepository languageRepository, JobRepository jobRepository,
-                                 CompetencyRepository competencyRepository, CandidateRepository candidateRepository) {
+                                 CompetencyRepository competencyRepository, CandidateRepository candidateRepository,
+                                 EmployeeRepository employeeRepository) {
         this.userRepository = userRepository;
         this.environment = environment;
         this.languageRepository = languageRepository;
         this.jobRepository = jobRepository;
         this.competencyRepository = competencyRepository;
         this.candidateRepository = candidateRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @PostConstruct
@@ -94,17 +98,17 @@ public class DatabaseSeederService {
         this.competencyRepository.saveAll(Arrays.asList(competencies));
 
         Training[] trainings = {
-            new Training("Certificacion", Level.TECNICO, LocalDate.of(2020, 3, 13),
-                    LocalDate.of(2021, 3, 13), "UNAPEC"),
-            new Training("Doctorado", Level.DOCTORADO, LocalDate.of(2020, 3, 13),
-                        LocalDate.of(2021, 3, 13), "INTEC")
+            new Training("Certificacion", Level.TECNICO, LocalDateTime.of(2020, 3, 13,0,0,0),
+                    LocalDateTime.of(2021, 3, 13, 0,0,0), "UNAPEC"),
+            new Training("Doctorado", Level.DOCTORADO, LocalDateTime.of(2020, 3, 13, 0,0,0),
+                    LocalDateTime.of(2021, 3, 13, 0,0,0), "INTEC")
         };
 
         WorkExperience[] workExperiences = {
-            new WorkExperience("La sirena", "Director general", LocalDate.of(2020, 3, 13),
-                  LocalDate.of(2021, 3, 13), 20000),
-            new WorkExperience("La sirena", "Director general", LocalDate.of(2020, 3, 13),
-                        LocalDate.of(2021, 3, 13), 20000)
+            new WorkExperience("La sirena", "Director general", LocalDateTime.of(2020, 3, 13, 0, 0, 0),
+                    LocalDateTime.of(2021, 3, 13, 0, 0, 0), 20000),
+            new WorkExperience("La sirena", "Director general", LocalDateTime.of(2020, 3, 13, 0, 0, 0),
+                    LocalDateTime.of(2021, 3, 13, 0, 0, 0), 20000)
         };
 
         Contact[] contacts = {
@@ -115,11 +119,30 @@ public class DatabaseSeederService {
         User user = this.userRepository.findByMobile("8496388432")
                 .orElseThrow(() -> new NotFoundException("mobile not found" + mobile));
 
+        Language[] languageCompetencies = {
+                this.languageRepository.findByName("Español"),
+                this.languageRepository.findByName("Ingles"),
+        };
+
+        Competency[] candidateCompetencies = {
+                this.competencyRepository.findByDescription("Git"),
+                this.competencyRepository.findByDescription("Sql"),
+        };
+
+        Job candidateJob = this.jobRepository.findByName("Programador Java");
+
         Candidate[] candidates = {
           new Candidate("Tomas Garcia Otaño", "40241349477", 20000, Arrays.asList(trainings), Arrays.asList(workExperiences),
-                  Arrays.asList(contacts), user)
+                  Arrays.asList(contacts), user, Arrays.asList(languageCompetencies), Arrays.asList(candidateCompetencies), candidateJob)
         };
         this.candidateRepository.saveAll(Arrays.asList(candidates));
+
+        Job employeeJob = this.jobRepository.findByName("Programador Java");
+
+        Employee[] employees = {
+                new Employee("Tomas Garcia Otaño",  "40241349477", 2000, user, employeeJob)
+        };
+        this.employeeRepository.saveAll(Arrays.asList(employees));
     }
 
     public void deleteAllAndInitialize() {
@@ -129,6 +152,7 @@ public class DatabaseSeederService {
         this.jobRepository.deleteAll();
         this.competencyRepository.deleteAll();
         this.candidateRepository.deleteAll();
+        this.employeeRepository.deleteAll();
         
         this.initialize();
     }

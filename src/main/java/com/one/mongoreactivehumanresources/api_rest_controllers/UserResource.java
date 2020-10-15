@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 import javax.validation.Valid;
 import java.util.stream.Collectors;
 
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN') or hasRole('CUSTOMER')")
 @RestController
 @RequestMapping(UserResource.USERS)
 public class UserResource {
@@ -32,6 +32,7 @@ public class UserResource {
     public UserResource(UserController userController) {
         this.userController = userController;
     }
+
 
     @PreAuthorize("authenticated")
     @PostMapping(value = TOKEN)
@@ -60,9 +61,9 @@ public class UserResource {
                 .doOnNext(log -> LogManager.getLogger(this.getClass()).debug(log));
     }
 
-    @PatchMapping(value = "/password" + MOBILE_ID)
+    @PutMapping(value = "/password" + MOBILE_ID)
     public Mono<UserDto> changePassword(@PathVariable String mobile, @Valid @RequestBody UserCredentialDto userCredentialDto) {
-        return this.userController.changePassword(mobile, userCredentialDto)
+            return this.userController.changePassword(mobile, userCredentialDto)
                 .doOnNext(log -> LogManager.getLogger(this.getClass()).debug(log));
     }
 

@@ -1,6 +1,7 @@
 package com.one.mongoreactivehumanresources.documents;
 
 import com.one.mongoreactivehumanresources.documents.enums.Risk;
+import com.one.mongoreactivehumanresources.dtos.JobDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,15 @@ public class Job {
         this.risk = risk;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
+        this.state = true;
+    }
+
+    public Job(JobDto jobDto) {
+        this.id = jobDto.getId();
+        this.name = jobDto.getName();
+        this.risk = jobDto.getRisk();
+        this.minSalary = jobDto.getMinSalary();
+        this.maxSalary = jobDto.getMaxSalary();
         this.state = true;
     }
 }

@@ -1,8 +1,10 @@
 package com.one.mongoreactivehumanresources.documents;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -12,7 +14,9 @@ import java.time.LocalDate;
 public class WorkExperience {
     private String company;
     private String job;
-    private LocalDate from;
-    private LocalDate to;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDateTime from;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private LocalDateTime to;
     private double salary;
 }

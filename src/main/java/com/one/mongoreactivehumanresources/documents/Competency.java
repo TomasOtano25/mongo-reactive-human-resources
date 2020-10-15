@@ -1,5 +1,6 @@
 package com.one.mongoreactivehumanresources.documents;
 
+import com.one.mongoreactivehumanresources.dtos.CompetencyDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,4 +25,11 @@ public class Competency {
         this();
         this.description = description;
     }
+
+    public Competency(CompetencyDto competencyDto) {
+        this.id = competencyDto.getId();
+        this.description = competencyDto.getDescription();
+        this.state = true;
+    }
+
 }

@@ -47,7 +47,7 @@ public class UserController {
     }
 
     public Mono<UserDto> createUser(UserDto userDto) {
-        Mono<Void> notExistByMobile = this.notExistByMobile(userDto.getUsername());
+        Mono<Void> notExistByMobile = this.notExistByMobile(userDto.getMobile());
         User user = User.builder().mobile(userDto.getMobile()).username(userDto.getUsername()).email(userDto.getEmail()).build();
         return Mono.when(notExistByMobile).then(this.userReactRepository.save(user)).map(UserDto::new);
     }
@@ -61,9 +61,11 @@ public class UserController {
         return this.userReactRepository.findByMobile(mobile)
                 .switchIfEmpty(Mono.error(new NotFoundException("User mobile:" + mobile)))
                 .handle((user, sink) -> {
-                    if(!this.isAuthorized(claimMobile, claimRoles, mobile, Arrays.stream(user.getRoles())
+                    if (!this.isAuthorized(claimMobile, claimRoles, mobile, Arrays.stream(user.getRoles())
                             .map(Role::roleName).collect(Collectors.toList()))) {
                         sink.error(new ForbiddenException("User mobile (" + mobile + ")"));
+                    } else {
+                        sink.next(user);
                     }
                 });
     }

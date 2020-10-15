@@ -1,14 +1,11 @@
 package com.one.mongoreactivehumanresources.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.one.mongoreactivehumanresources.documents.Candidate;
-import com.one.mongoreactivehumanresources.documents.Training;
+import com.one.mongoreactivehumanresources.documents.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +25,21 @@ public class CandidateDto {
 
     private List<Training> trainings;
 
-    public CandidateDto(List<Training> trainings) {
+    private List<WorkExperience> workExperiences;
+
+    private List<Contact> contacts;
+
+    private List<LanguageDto> languages;
+
+    private List<CompetencyDto> competencies;
+
+    private JobDto job;
+
+    public CandidateDto(List<Training> trainings, List<WorkExperience> workExperiences,
+                        List<Contact> contacts) {
         this.trainings = trainings;
+        this.workExperiences = workExperiences;
+        this.contacts = contacts;
     }
 
     public CandidateDto(Candidate candidate) {
@@ -38,5 +48,10 @@ public class CandidateDto {
         this.dni = candidate.getDni();
         this.salary = candidate.getSalary();
         this.trainings = candidate.getTrainings();
+        this.workExperiences = candidate.getWorkExperiences();
+        this.contacts = candidate.getContacts();
+        this.languages = candidate.getLanguages().stream().map(language -> new LanguageDto(language)).collect(Collectors.toList());
+        this.competencies = candidate.getCompetencies().stream().map(competency -> new CompetencyDto(competency)).collect(Collectors.toList());
+        this.job = new JobDto(candidate.getJob());
     }
 }
